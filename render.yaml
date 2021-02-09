@@ -1,0 +1,57 @@
+services:
+  # A Docker web service
+  - type: web
+    name: hasura
+    env: docker
+    healthCheckPath: /healthz
+    numInstances: 1
+    dockerfilePath: ./hasura/Dockerfile
+    dockerContext: ./hasura
+    envVars:
+      - fromGroup: hasura-secrets
+      - key: HASURA_GRAPHQL_DATABASE_URL
+        fromDatabase:
+          name: metagame-db
+          property: connectionString
+      - key: BACKEND_HOST
+        fromService:
+          name: backend
+          type: pserv
+          property: hostport
+      - key: HASURA_GRAPHQL_SERVER_PORT
+        value: 10000
+
+  # backend
+  - type: pserv
+    name: backend
+    env: docker
+    numInstances: 1
+    dockerfilePath: ./docker/backend/Dockerfile
+    dockerContext: .
+    envVars:
+      - fromGroup: hasura-secrets
+      - key: IMGIX_TOKEN
+        sync: false
+      - key: GRAPHQL_HOST
+        fromService:
+          name: hasura
+          type: web
+          property: host
+
+databases:
+  - name: metagame-db
+    plan: starter
+
+envVarGroups:
+  - name: hasura-secrets
+    envVars:
+      - key: HASURA_GRAPHQL_ADMIN_SECRET
+        generateValue: true
+  - name: frontend
+    envVars:
+      - key: NEXT_PUBLIC_INFURA_ID
+        sync: false
+      - key: NEXT_PUBLIC_GRAPHQL_URL
+        sync: false
+      - key: NEXT_TELEMETRY_DISABLED
+        value: 1
