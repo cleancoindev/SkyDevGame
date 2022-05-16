@@ -14,7 +14,7 @@
     "@chakra-ui/core": "0.8.0",
     "@emotion/core": "10.0.35",
     "@emotion/styled": "10.0.27",
-    "@types/styled-components": "5.1.4",
+    "@types/styled-components": "5.1.25",
     "babel-plugin-styled-components": "1.11.1",
     "emotion-theming": "10.0.27",
     "graphql": "15.4.0",
@@ -30,7 +30,7 @@
     "react-redux": "7.2.1",
     "redux": "4.0.5",
     "redux-thunk": "2.3.0",
-    "styled-components": "5.2.1",
+    "styled-components": "5.3.5",
     "urql": "1.11.6"
   }
 }
